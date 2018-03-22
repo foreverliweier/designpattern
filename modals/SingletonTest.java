@@ -15,25 +15,38 @@
 public class SingletonTest {
     public static void main(String[] args) {
         int i = 0;
-        while (i < 100) {
+        int count = 100000;
+        Long start = System.currentTimeMillis();
+        Long length, length2, length3 = 0L;
+        while (i < count) {
             i++;
             Thread t1 = new Thread(new Runa());//测试加锁的互斥懒单例模式
             t1.start();
         }
+        length = System.currentTimeMillis() - start;
         i = 0;
+
         System.out.println("。。。。。。");
-        while (i < 100) {
+        start =  System.currentTimeMillis();
+        while (i < count) {
             i++;
             Thread t1 = new Thread(new Runb());//测试不加锁的互斥懒单例模式
             t1.start();
         }
+        length2 = System.currentTimeMillis() - start;
+
         i = 0;
         System.out.println("。。。。。。");
-        while (i < 100) {
+        start =  System.currentTimeMillis();
+
+        while (i < count) {
             i++;
             Thread t1 = new Thread(new Runc());//测试饿单例模式
             t1.start();
         }
+        length3 = System.currentTimeMillis() - start;
+
+        System.out.println("时间分别是\nlazy=" + length + "\nlazy1=" + length2 + "\nhungry=" + length3);
     }
 }
 
@@ -45,7 +58,7 @@ class Runa implements Runnable {
     @Override
     public void run() {
         SingletonLazy sh1 = SingletonLazy.getInstance();
-        System.out.println("地址为" + sh1.toString());
+//        System.out.println("地址为" + sh1.toString());
     }
 }
 
@@ -54,7 +67,7 @@ class Runb implements Runnable {
     @Override
     public void run() {
         SingletonLazy1 sh1 = SingletonLazy1.getInstance();
-        System.out.println("地址为" + sh1.toString());
+//        System.out.println("地址为" + sh1.toString());
     }
 }
 
@@ -63,7 +76,7 @@ class Runc implements Runnable {
     @Override
     public void run() {
         SingletonHungry sh1 = SingletonHungry.getInstance();
-        System.out.println("地址为" + sh1.toString());
+//        System.out.println("地址为" + sh1.toString());
     }
 }
 
@@ -76,7 +89,7 @@ class Runc implements Runnable {
 class SingletonLazy {
 
     private static SingletonLazy singletonLazy = null;
-    private static String lock = "";
+//    private static String lock = ""; 用SingletonLazy.class 节省内存空间 ，避免静态变量lock 开辟空间
 
     private SingletonLazy() {
         System.out.println("SingletonLazy,当前" + this.toString() + ";当前时间为" + System.currentTimeMillis());
@@ -86,7 +99,7 @@ class SingletonLazy {
 
         //优化，如果已经被实例化后，每次调用getInstance时都会被调用代码块
         if (null == singletonLazy) {
-            synchronized (lock) {
+            synchronized (SingletonLazy.class) {
                 if (singletonLazy == null) {
                     singletonLazy = new SingletonLazy();
                 }
@@ -102,7 +115,7 @@ class SingletonLazy1 {
     private static SingletonLazy1 singletonLazy1 = null;
 
     private SingletonLazy1() {
-        System.out.println("SingletonLazy,当前" + this.toString() + ";当前时间为" + System.currentTimeMillis());
+        System.out.println("SingletonLazy1,当前" + this.toString() + ";当前时间为" + System.currentTimeMillis());
     }
 
     public static SingletonLazy1 getInstance() {
