@@ -3,7 +3,7 @@
  * <p>
  * 概念
  * 一个类只保证一个实例，～补充概念
- *
+ * <p>
  * 单例模式：（保证三点）
  * 1.构造函数为私有
  * 2.私有静态变量引用实例
@@ -35,7 +35,6 @@ public class SingletonTest {
             t1.start();
         }
     }
-
 }
 
 /**
@@ -49,6 +48,7 @@ class Runa implements Runnable {
         System.out.println("地址为" + sh1.toString());
     }
 }
+
 class Runb implements Runnable {
 
     @Override
@@ -57,6 +57,7 @@ class Runb implements Runnable {
         System.out.println("地址为" + sh1.toString());
     }
 }
+
 class Runc implements Runnable {
 
     @Override
@@ -65,11 +66,12 @@ class Runc implements Runnable {
         System.out.println("地址为" + sh1.toString());
     }
 }
+
 /**
  * @懒单例模式 :用到的时候才生成，容易出现线程不安全，需要加锁
  * <p>
- * 优点：
- * 缺点：
+ * 优点：充分利用资源
+ * 缺点：容易
  */
 class SingletonLazy {
 
@@ -81,16 +83,20 @@ class SingletonLazy {
     }
 
     public static SingletonLazy getInstance() {
-        synchronized (lock) {
-            if (singletonLazy == null) {
-                singletonLazy = new SingletonLazy();
+
+        //优化，如果已经被实例化后，每次调用getInstance时都会被调用代码块
+        if (null == singletonLazy) {
+            synchronized (lock) {
+                if (singletonLazy == null) {
+                    singletonLazy = new SingletonLazy();
+                }
             }
         }
         return singletonLazy;
     }
 }
 
-//未加锁的lay
+//未加锁的lazy
 class SingletonLazy1 {
 
     private static SingletonLazy1 singletonLazy1 = null;
@@ -110,8 +116,8 @@ class SingletonLazy1 {
 /**
  * @饿单例模式 ：在类加载的时候就被实例化好
  * <p>
- * 优点：线程安全，
- * 缺点：资源利用率不高
+ * 优点：线程安全，类加载的已经创建好实例
+ * 缺点：资源利用率不高，当调用类的其他静态方法时，该类可能未被使用，但已经被实例化好
  */
 class SingletonHungry {
 
