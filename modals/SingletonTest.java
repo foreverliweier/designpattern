@@ -13,11 +13,11 @@
  * @time 2018-03-21 下午5:01
  **/
 public class SingletonTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         int i = 0;
-        int count = 100000;
+        int count = 1000000;
         Long start = System.currentTimeMillis();
-        Long length, length2, length3 = 0L;
+        Long length, length2, length3 ;
         while (i < count) {
             i++;
             Thread t1 = new Thread(new Runa());//测试加锁的互斥懒单例模式
@@ -25,7 +25,7 @@ public class SingletonTest {
         }
         length = System.currentTimeMillis() - start;
         i = 0;
-
+        Thread.sleep(10000);
         System.out.println("。。。。。。");
         start =  System.currentTimeMillis();
         while (i < count) {
@@ -34,7 +34,7 @@ public class SingletonTest {
             t1.start();
         }
         length2 = System.currentTimeMillis() - start;
-
+        Thread.sleep(10000);
         i = 0;
         System.out.println("。。。。。。");
         start =  System.currentTimeMillis();
@@ -61,7 +61,9 @@ class Runa implements Runnable {
 //        System.out.println("地址为" + sh1.toString());
     }
 }
-
+/**
+ * 测试
+ * */
 class Runb implements Runnable {
 
     @Override
