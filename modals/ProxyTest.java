@@ -9,7 +9,7 @@ import java.lang.reflect.Proxy;
  * 代理类，委托类需要共同实现一个接口
  * 代理对象在被代理对象执行前附加其他的操作
  *
- * @author z_yanyan
+ * @author
  * @time 2018-03-23 下午2:24
  **/
 public class ProxyTest {

@@ -9,7 +9,7 @@
  * 2.私有静态变量引用实例
  * 3.公共静态方法返回私有静态变量
  *
- * @author z_yanyan
+ * @author
  * @time 2018-03-21 下午5:01
  **/
 public class SingletonTest {
